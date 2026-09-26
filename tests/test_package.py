@@ -19,6 +19,14 @@ class PackageIntegrityTests(unittest.TestCase):
             with self.subTest(path=path.relative_to(ROOT)):
                 ET.parse(path)
 
+    def test_worktree_payload_stays_below_128_mib(self):
+        payload = sum(
+            path.stat().st_size
+            for path in ROOT.rglob("*")
+            if path.is_file() and ".git" not in path.parts and "__pycache__" not in path.parts
+        )
+        self.assertLess(payload, 128 * 1024 * 1024)
+
     def test_set_file_points_to_existing_assets(self):
         root = self.parse("A350-set.xml")
         sim = root.find("sim")

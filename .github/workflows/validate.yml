@@ -1,0 +1,26 @@
+name: Validate aircraft package
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  package-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run offline and optional simulator smoke tests
+        run: python -m unittest discover -s tests -v
+      - name: Verify generated files are reproducible
+        run: |
+          cp A350.xml "$RUNNER_TEMP/A350.xml"
+          cp Models/A350.ac "$RUNNER_TEMP/A350.ac"
+          python tools/build_fdm.py
+          python tools/generate_model.py
+          cmp A350.xml "$RUNNER_TEMP/A350.xml"
+          cmp Models/A350.ac "$RUNNER_TEMP/A350.ac"
