@@ -35,7 +35,7 @@ Nasal/systems.nas            Scheduler and property initialization
 Nasal/display.nas            On-demand Canvas systems-status display (E key)
 tools/build_fdm.py           Assemble FDM sections into A350.xml
 tools/generate_model.py      Generate AC3D geometry from source
-tests/test_package.py        Offline package, XML and 128 MiB budget checks
+tests/test_package.py        Offline package and XML integrity checks
 tests/test_jsbsim_runtime.py Optional JSBSim load/integration test
 .github/workflows/validate.yml GitHub Actions reproducibility and test checks
 ```
@@ -58,7 +58,7 @@ Run the repository's checks with:
 python3 -m unittest discover -s tests -v
 ```
 
-The offline suite checks XML well-formedness, reproducible FDM assembly, package references, generated model object names, public-dimension consistency, and the 128 MiB repository payload budget. An optional JSBSim runtime test runs when the `jsbsim` Python module is installed and `JSBSIM_ROOT` points to a JSBSim data directory containing `engine/direct.xml`:
+The offline suite checks XML well-formedness, reproducible FDM assembly, package references, and generated model object names and dimensions. It does not impose an overall repository-size cap. An optional JSBSim runtime test runs when the `jsbsim` Python module is installed and `JSBSIM_ROOT` points to a JSBSim data directory containing `engine/direct.xml`:
 
 ```sh
 JSBSIM_ROOT=/path/to/jsbsim-data python3 -m unittest discover -s tests -v
