@@ -19,17 +19,17 @@
     <vtailarea unit="FT2">650</vtailarea>
     <vtailarm unit="FT">78</vtailarm>
     <location name="AERORP" unit="IN">
-      <x>1230</x>
+      <x>0</x>
       <y>0</y>
-      <z>-20</z>
+      <z>0</z>
     </location>
     <location name="EYEPOINT" unit="IN">
-      <x>1030</x>
-      <y>-24</y>
-      <z>72</z>
+      <x>-1050</x>
+      <y>0</y>
+      <z>110</z>
     </location>
     <location name="VRP" unit="IN">
-      <x>1230</x>
+      <x>0</x>
       <y>0</y>
       <z>0</z>
     </location>
@@ -43,25 +43,25 @@
     <iyz unit="SLUG*FT2">0</iyz>
     <emptywt unit="LBS">315000</emptywt>
     <location name="CG" unit="IN">
-      <x>1230</x>
+      <x>0</x>
       <y>0</y>
-      <z>-20</z>
+      <z>0</z>
     </location>
     <pointmass name="Estimated cabin payload">
       <weight unit="LBS">80000</weight>
       <location unit="IN">
-        <x>1210</x>
+        <x>-100</x>
         <y>0</y>
-        <z>-8</z>
+        <z>0</z>
       </location>
     </pointmass>
   </mass_balance>
   <ground_reactions>
     <contact name="Nose gear" type="BOGEY">
       <location unit="IN">
-        <x>635</x>
+        <x>-1109.03</x>
         <y>0</y>
-        <z>-190</z>
+        <z>-157.33</z>
       </location>
       <static_friction>0.80</static_friction>
       <dynamic_friction>0.55</dynamic_friction>
@@ -75,9 +75,9 @@
     </contact>
     <contact name="Left main gear" type="BOGEY">
       <location unit="IN">
-        <x>1450</x>
-        <y>-150</y>
-        <z>-190</z>
+        <x>-11.42</x>
+        <y>-210.04</y>
+        <z>-157.87</z>
       </location>
       <static_friction>0.80</static_friction>
       <dynamic_friction>0.55</dynamic_friction>
@@ -91,9 +91,9 @@
     </contact>
     <contact name="Right main gear" type="BOGEY">
       <location unit="IN">
-        <x>1450</x>
-        <y>150</y>
-        <z>-190</z>
+        <x>-11.42</x>
+        <y>210.04</y>
+        <z>-157.87</z>
       </location>
       <static_friction>0.80</static_friction>
       <dynamic_friction>0.55</dynamic_friction>
@@ -112,14 +112,14 @@
       <feed>1</feed>
       <thruster file="direct">
         <location unit="IN">
-          <x>1050</x>
-          <y>-250</y>
-          <z>-92</z>
+          <x>-307</x>
+          <y>-404</y>
+          <z>54</z>
         </location>
         <orient unit="DEG">
           <roll>0</roll>
-          <pitch>0</pitch>
-          <yaw>0</yaw>
+          <pitch>2.2</pitch>
+          <yaw>1</yaw>
         </orient>
       </thruster>
     </engine>
@@ -128,22 +128,22 @@
       <feed>2</feed>
       <thruster file="direct">
         <location unit="IN">
-          <x>1050</x>
-          <y>250</y>
-          <z>-92</z>
+          <x>-307</x>
+          <y>404</y>
+          <z>54</z>
         </location>
         <orient unit="DEG">
           <roll>0</roll>
-          <pitch>0</pitch>
-          <yaw>0</yaw>
+          <pitch>2.2</pitch>
+          <yaw>-1</yaw>
         </orient>
       </thruster>
     </engine>
     <tank type="FUEL">
       <location unit="IN">
-        <x>1250</x>
-        <y>-250</y>
-        <z>-15</z>
+        <x>-41</x>
+        <y>-333</y>
+        <z>51</z>
       </location>
       <capacity unit="LBS">98000</capacity>
       <contents unit="LBS">42000</contents>
@@ -151,9 +151,9 @@
     </tank>
     <tank type="FUEL">
       <location unit="IN">
-        <x>1190</x>
+        <x>-183.46</x>
         <y>0</y>
-        <z>-15</z>
+        <z>-59.05</z>
       </location>
       <capacity unit="LBS">98000</capacity>
       <contents unit="LBS">42000</contents>
@@ -161,9 +161,9 @@
     </tank>
     <tank type="FUEL">
       <location unit="IN">
-        <x>1250</x>
-        <y>250</y>
-        <z>-15</z>
+        <x>-41</x>
+        <y>333</y>
+        <z>51</z>
       </location>
       <capacity unit="LBS">98000</capacity>
       <contents unit="LBS">42000</contents>

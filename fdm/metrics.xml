@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <metrics>
   <wingarea unit="FT2">4767</wingarea>
   <wingspan unit="FT">212.435</wingspan>
@@ -8,19 +8,12 @@
   <vtailarea unit="FT2">650</vtailarea>
   <vtailarm unit="FT">78</vtailarm>
   <location name="AERORP" unit="IN">
-    <x>1230</x>
-    <y>0</y>
-    <z>-20</z>
+    <x>0</x><y>0</y><z>0</z>
   </location>
   <location name="EYEPOINT" unit="IN">
-    <x>1030</x>
-    <y>-24</y>
-    <z>72</z>
+    <x>-1050</x><y>0</y><z>110</z>
   </location>
   <location name="VRP" unit="IN">
-    <x>1230</x>
-    <y>0</y>
-    <z>0</z>
+    <x>0</x><y>0</y><z>0</z>
   </location>
 </metrics>
-  

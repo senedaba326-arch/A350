@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <mass_balance negated_crossproduct_inertia="true">
   <ixx unit="SLUG*FT2">5.80e7</ixx>
   <iyy unit="SLUG*FT2">2.05e7</iyy>
@@ -8,17 +8,10 @@
   <iyz unit="SLUG*FT2">0</iyz>
   <emptywt unit="LBS">315000</emptywt>
   <location name="CG" unit="IN">
-    <x>1230</x>
-    <y>0</y>
-    <z>-20</z>
+    <x>0</x><y>0</y><z>0</z>
   </location>
   <pointmass name="Estimated cabin payload">
     <weight unit="LBS">80000</weight>
-    <location unit="IN">
-      <x>1210</x>
-      <y>0</y>
-      <z>-8</z>
-    </location>
+    <location unit="IN"><x>-100</x><y>0</y><z>0</z></location>
   </pointmass>
 </mass_balance>
-  

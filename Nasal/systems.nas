@@ -21,6 +21,12 @@ var A350Systems = {
     me.timer.start();
   },
 
+  toggleExternalPower: func {
+    var current = getprop("/systems/a350/electrical/external-power");
+    setprop("/systems/a350/electrical/external-power", current ? 0 : 1);
+    me.update();
+  },
+
   update: func {
     A350Electrical.update();
     A350Hydraulics.update(0.25);

@@ -27,13 +27,55 @@ class PackageIntegrityTests(unittest.TestCase):
         self.assertEqual(sim.findtext("aero"), "A350")
         self.assertTrue((ROOT / "A350.xml").is_file())
         model = sim.find("model")
-        self.assertEqual(model.get("path"), "Aircraft/A350/Models/A350.xml")
-        self.assertTrue((ROOT / "Models/A350.xml").is_file())
+        self.assertEqual(model.get("path"), "Aircraft/A350/Models/A350XWB-900.xml")
+        self.assertTrue((ROOT / "Models/A350XWB-900.xml").is_file())
+        self.assertEqual(root.get("include"), "A350-common.xml")
+        common = self.parse("A350-common.xml")
+        self.assertIsNotNone(common.find("./sim/systems/path"))
+        self.assertIsNotNone(common.find("./sim/instrumentation/path"))
+        for node in common.findall(".//path"):
+            fg_path = (node.text or "").strip().removeprefix("Aircraft/A350/")
+            self.assertTrue((ROOT / fg_path).is_file(), node.text)
+        self.assertTrue((ROOT / "Models/A350XWB-900.ac").is_file())
+        self.assertTrue((ROOT / "Models/A350XWB-900-flightdeck.xml").is_file())
         for filename in root.findall("./nasal/load/file"):
             fg_path = filename.text or ""
             self.assertTrue(fg_path.startswith("Aircraft/A350/"), fg_path)
             local = ROOT / fg_path.removeprefix("Aircraft/A350/")
             self.assertTrue(local.is_file(), fg_path)
+
+    def test_imported_model_and_sound_references_resolve(self):
+        for path in sorted((ROOT / "Models").rglob("*.xml")):
+            root = ET.parse(path).getroot()
+            for node in root.iter("path"):
+                value = (node.text or "").strip()
+                if value.startswith(("Aircraft/A350/", "/Aircraft/A350/")):
+                    local = value.removeprefix("/").removeprefix("Aircraft/A350/")
+                    self.assertTrue((ROOT / local).is_file(), f"{path.relative_to(ROOT)}: {value}")
+        sounds = ET.parse(ROOT / "Sounds/A350XWB-sounds.xml").getroot()
+        for node in sounds.iter("path"):
+            value = (node.text or "").strip().removeprefix("/")
+            if value.startswith("Aircraft/A350/"):
+                value = value.removeprefix("Aircraft/A350/")
+            elif not value.startswith("Sounds/"):
+                continue
+            self.assertTrue((ROOT / value).is_file(), value)
+
+    def test_imported_ac3d_texture_references_exist(self):
+        available = {path.name for path in (ROOT / "Models").rglob("*") if path.is_file()}
+        references = []
+        for path in (ROOT / "Models").rglob("*.ac"):
+            text = path.read_text(encoding="utf-8", errors="replace")
+            references.extend(re.findall(r'^texture "([^"]+)"', text, re.MULTILINE))
+        missing = sorted({Path(value).name for value in references} - available)
+        self.assertEqual(missing, [])
+
+    def test_imported_assets_keep_license_and_credits(self):
+        notices = (ROOT / "THIRD_PARTY_NOTICES.md").read_text(encoding="utf-8")
+        self.assertIn("d7e32927548d2da84ea40cc734f82d43f6ca6bc2", notices)
+        self.assertIn("GPL2+", notices)
+        self.assertIn("Sbyx", notices)
+        self.assertTrue((ROOT / "COPYING").is_file())
 
     def test_public_dimension_reference_values(self):
         root = self.parse("A350.xml")

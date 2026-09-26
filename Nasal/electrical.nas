@@ -30,5 +30,17 @@ var A350Electrical = {
     setprop("/systems/a350/electrical/source-engine-2", engine1);
     setprop("/systems/a350/electrical/source-apu", apu);
     setprop("/systems/a350/electrical/source-external", external);
+
+    # Compatibility outputs used by FlightGear's legacy cockpit-display and
+    # exterior-light model properties. Voltage is a display-availability
+    # signal only; it is not a solved AC network.
+    setprop("/systems/electrical/outputs/bus", available ? 28 : 0);
+    foreach (var light; ["strobe", "beacon", "taxi-lights", "logo-lights", "nav-lights", "cabin-lights"]) {
+      var requested = me.value("/controls/lighting/" ~ light, 0);
+      setprop("/systems/electrical/outputs/" ~ light, available and requested);
+    }
+    setprop("/systems/electrical/outputs/landing-light[0]", available and me.value("/controls/lighting/landing-lights", 0));
+    setprop("/systems/electrical/outputs/landing-light[1]", available and me.value("/controls/lighting/landing-lights", 0));
+    setprop("/systems/electrical/outputs/landing-light[2]", available and me.value("/controls/lighting/landing-lights", 0));
   }
 };

@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<PropertyList>
+<PropertyList include="A350-common.xml">
   <sim>
-    <description>Airbus A350-900 — community simulation model</description>
-    <author>Community A350 project</author>
+    <description>Airbus A350-900 — GPL community flight-simulator model</description>
+    <author>FlightGear A350 community contributors; see THIRD_PARTY_NOTICES.md</author>
     <status>alpha</status>
     <rating>
       <FDM type="int">2</FDM>
-      <systems type="int">1</systems>
-      <cockpit type="int">1</cockpit>
-      <model type="int">1</model>
+      <systems type="int">2</systems>
+      <cockpit type="int">3</cockpit>
+      <model type="int">4</model>
     </rating>
-    <aircraft-version type="string">0.1.0</aircraft-version>
+    <aircraft-version type="string">0.2.0</aircraft-version>
     <minimum-fg-version type="string">2020.3</minimum-fg-version>
     <flight-model>jsb</flight-model>
     <aero>A350</aero>
-    <model path="Aircraft/A350/Models/A350.xml"/>
+    <model path="Aircraft/A350/Models/A350XWB-900.xml"/>
     <tags>
       <tag>airliner</tag>
       <tag>twin-engine</tag>
@@ -38,6 +38,22 @@
         <binding>
           <command>nasal</command>
           <script>A350Display.toggle();</script>
+        </binding>
+      </key>
+      <key n="66">
+        <name>B</name>
+        <desc>Toggle parking brake</desc>
+        <binding>
+          <command>property-toggle</command>
+          <property>controls/gear/brake-parking</property>
+        </binding>
+      </key>
+      <key n="69">
+        <name>E</name>
+        <desc>Toggle simulated external power</desc>
+        <binding>
+          <command>nasal</command>
+          <script>A350Systems.toggleExternalPower();</script>
         </binding>
       </key>
     </keyboard>

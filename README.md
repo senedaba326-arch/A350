@@ -1,77 +1,75 @@
-# Airbus A350-900 — FlightGear community model
+# Airbus A350-900 — FlightGear community aircraft
 
-A self-contained **early-stage, educational FlightGear/JSBSim aircraft package**. It provides a simplified A350-900-shaped FDM, a generated low-polygon exterior, conventional JSBSim control surfaces, and a Nasal/Canvas systems status page. It is not an Airbus product, not an operationally accurate aircraft simulation, and not suitable for training or safety-critical use.
+An early-stage, educational FlightGear/JSBSim aircraft package. The exterior and 3D flight deck are based on the GPL-licensed FlightGear A350XWB community model; this repository retains its independent, simplified JSBSim flight model and adds a small set of illustrative Nasal systems. This is **not** an Airbus product or an operationally accurate A350 simulation, and is not suitable for training or safety-critical use.
 
-## Install and run
+## Install and fly
 
-1. Copy this repository directory into a FlightGear aircraft search path as `Aircraft/A350` (or add its parent directory with `--fg-aircraft`).
+1. Install this directory in a FlightGear aircraft search path as `Aircraft/A350`, or add its parent directory with `--fg-aircraft`.
 2. Start FlightGear with `--aircraft=A350`.
-3. Press **E** to show or hide the community systems status page.
-4. Use the normal FlightGear controls for aileron, elevator, rudder, throttle, flaps, and landing gear. Start engines using FlightGear's normal engine controls.
+3. Press **e** to show or hide the community systems-status page.
+4. Press **E** to toggle the demonstrator's simulated external electrical power. It only enables display/system indications; it does not model a real external-power connection.
+5. Use FlightGear's normal controls for roll, pitch, yaw, throttle, flaps and landing gear. Start the engines using FlightGear's normal engine controls. **B** toggles the parking brake.
+6. Use FlightGear's normal view controls to reach the copilot, full-cockpit, overhead-panel and pedestal views.
 
-The root `A350-set.xml` references `A350.xml` as the JSBSim FDM and `Models/A350.xml` as the exterior model wrapper. The editable JSBSim source is split into `fdm/*.xml`; after changing those sections, regenerate the single runtime file with `python3 tools/build_fdm.py`. `Models/A350.ac` can be regenerated using `python3 tools/generate_model.py`. Both builders use Python's standard library and create compact outputs.
+The aircraft set file selects `Models/A350XWB-900.xml` for the imported exterior/flight deck and `A350.xml` for the local JSBSim FDM. The earlier generated exterior (`Models/A350.xml` and `Models/A350.ac`) remains in the repository as a fallback/reference but is not selected by the set file. Airline liveries and the upstream dynamic livery selector were not imported; the included base texture is used instead.
 
-## Package layout
+## Package map
 
 ```text
-A350-set.xml                 FlightGear aircraft entry point and key binding
-A350.xml                     Generated JSBSim runtime configuration
-fdm/fileheader.xml           Model metadata and safety notes
-fdm/metrics.xml              Reference dimensions
-fdm/mass_balance.xml         Estimated mass, payload and inertia
-fdm/ground_reactions.xml     Nose and main landing-gear contacts
-fdm/propulsion.xml           Two engines and three fuel tanks
-fdm/flight_control.xml       Conventional pilot-to-surface FCS
-fdm/aerodynamics.xml         Estimated force and moment coefficients
-fdm/output.xml               Optional JSBSim CSV telemetry
-Engines/TrentXWB84.xml       Generic 84-klbf-class turbofan approximation
-Models/A350.xml              AC3D model wrapper and control/gear animations
-Models/A350.ac               Generated low-poly exterior geometry
-Nasal/electrical.nas         Simplified electrical bus availability
-Nasal/hydraulics.nas         Three illustrative hydraulic pressure states
-Nasal/flight-controls.nas    PRIM/SEC availability flags (not control laws)
-Nasal/pneumatics.nas         Simplified bleed and pack availability
-Nasal/systems.nas            Scheduler and property initialization
-Nasal/display.nas            On-demand Canvas systems-status display (E key)
-tools/build_fdm.py           Assemble FDM sections into A350.xml
-tools/generate_model.py      Generate AC3D geometry from source
-tests/test_package.py        Offline package and XML integrity checks
-tests/test_jsbsim_runtime.py Optional JSBSim load/integration test
-.github/workflows/validate.yml GitHub Actions reproducibility and test checks
+A350-set.xml                         FlightGear entry point, local Nasal loading and key bindings
+A350-common.xml                      Cockpit/camera views, instrumentation, systems and sound references
+A350.xml                             Generated JSBSim runtime configuration (local FDM)
+fdm/*.xml                            Editable JSBSim sections; rebuild with tools/build_fdm.py
+Engines/TrentXWB84.xml               Generic 84-klbf-class turbofan approximation
+Models/A350XWB-900.xml               GPL community exterior wrapper and animations
+Models/A350XWB-900.ac                GPL community exterior geometry
+Models/A350XWB-900-flightdeck.xml    GPL community 3D cockpit and instrument submodels
+Models/                                Imported GPL geometry, textures, lights, effects and submodels
+Sounds/                               Imported GPL sound assets/configuration
+Systems/                              Imported generic FlightGear instrument/system configuration
+Nasal/*.nas                            Local simplified electrical, hydraulic, flight-control,
+                                      pneumatic and status-display demonstrations
+Models/A350.xml, Models/A350.ac        Previous generated exterior fallback/reference
+COPYING                                GPL version 2 license text from the upstream model
+THIRD_PARTY_NOTICES.md                 Source revision, credits and adaptation notes
 ```
 
-## Scope and modeling notes
+## Flight dynamics and systems scope
 
-- Airbus publishes headline A350-900 dimensions and performance figures; the dimensions used here are 66.80 m length and 64.75 m span. The FDM uses a nominal 280–283 t maximum take-off mass class and two generic 84,000 lbf-class engines as broad reference points. These are **not a complete set of authoritative configuration-specific limits**.
-- The aerodynamic coefficients, inertia tensor, fuel split, load distribution, landing-gear characteristics, engine maps, and all systems logic are independent rough estimates. They have not been flight-tested or validated against Airbus data.
-- The JSBSim flight controls are intentionally conventional and direct. The Nasal PRIM/SEC indicators are availability/status demonstrations only; they do **not** implement Airbus fly-by-wire laws, protections, reconfiguration, envelope limiting, or redundancy management.
-- Hydraulic pressures are simple first-order state estimates around 5,000 psi. Electrical buses show nominal 115/200 V, 400 Hz service values but do not simulate three-phase circuits, generators, contactors, or load shedding. Pneumatics are indicative source/pack flags, not thermodynamic bleed-air or cabin-pressure models.
-- The Canvas panel is a small systems-status window, not an ECAM, PFD/ND, or finished 3D cockpit. Exterior geometry is generated from simple polygons and has no production textures or airline livery.
+- The independent JSBSim FDM retains a conventional direct-control model. Its wing, tail, gear and engine station locations were brought closer to the imported model's coordinate frame; mass, inertia, aerodynamics, engine maps and gear response remain estimates.
+- Public A350-900 headline dimensions (66.80 m length and 64.75 m span) and a nominal 280–283 t maximum-takeoff-mass class inform the model. The current wing reference area is an approximate input, not an authoritative aircraft limit or configuration-specific data.
+- The control system does **not** implement Airbus fly-by-wire laws, protections, envelope limiting, redundancy management or reconfiguration. Do not infer real A350 handling or procedures from it.
+- The local electrical, hydraulic and pneumatic logic is illustrative. Nominal voltage/pressure indications and the display-availability bridge are simplified state flags, not component-level aircraft simulations. The flight deck and legacy instrumentation are not validated together in FlightGear.
+- The imported visual model is a community contribution. Its rendering, camera alignment, animations, sounds and interactive cockpit behavior have not been flight-tested in this checkout. FlightGear (`fgfs`) was unavailable in the development environment; the offline checks cannot establish in-simulator correctness.
+- Airbus is not affiliated with or endorsing this project. No proprietary FCOM or restricted Airbus engineering data is included. Nothing here is certified, validated for real-world operation, or suitable for training or safety-critical use.
 
-Never use this package to operate a real aircraft or infer real aircraft procedures.
+## License and third-party assets
 
-## Development checks
+The imported A350XWB community model is declared GPL version 2 or later by its upstream README. The upstream `COPYING` text is retained in this repository. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for the exact source revision, credited contributors and the scope of our changes. The FDM and Nasal additions remain explicitly non-operational community work; consult the repository history for their authorship and licensing details.
 
-Run the repository's checks with:
+## Development and validation
+
+Run the offline checks with:
 
 ```sh
 python3 -m unittest discover -s tests -v
 ```
 
-The offline suite checks XML well-formedness, reproducible FDM assembly, package references, and generated model object names and dimensions. It does not impose an overall repository-size cap. An optional JSBSim runtime test runs when the `jsbsim` Python module is installed and `JSBSIM_ROOT` points to a JSBSim data directory containing `engine/direct.xml`:
+The checks cover XML parsing, the set-file's selected assets, reproducible FDM assembly, model geometry and a JSBSim smoke test when its Python module and data directory are installed. They do not test FlightGear rendering, Nasal execution, sound, camera placement or cockpit behavior. `fgfs` is not installed in the current development environment.
+
+Rebuild the local FDM after changing `fdm/*.xml`:
 
 ```sh
-JSBSIM_ROOT=/path/to/jsbsim-data python3 -m unittest discover -s tests -v
+python3 tools/build_fdm.py
 ```
 
-GitHub Actions runs the offline suite and checks that generated outputs are reproducible. FlightGear rendering, Nasal execution, and cockpit presentation still require an in-simulator check.
+The earlier generated low-polygon fallback can be regenerated with `python3 tools/generate_model.py`. Both scripts use Python's standard library. No total repository-size cap is imposed; keep individual GitHub-hosted files within the platform's per-file limits and use Git LFS if future single assets exceed them.
 
 ## References consulted
 
-- FlightGear aircraft set-file format and package guidance: <https://wiki.flightgear.org/Aircraft-set.xml> and <https://wiki.flightgear.org/Howto:Make_an_aircraft>
-- JSBSim XML model/reference material: <https://jsbsim.sourceforge.net/JSBSim.xsd.html> and the JSBSim reference manual.
-- JSBSim generic turbine examples: <https://github.com/JSBSim-Team/jsbsim/blob/master/engine/CFM56.xml>
-- FlightGear Canvas snippets: <https://wiki.flightgear.org/Canvas_Snippets>
-- Airbus public A350-900 specifications: <https://www.aircraft.airbus.com/en/aircraft/a350/a350-900>
-
-The proprietary Airbus FCOM and restricted engineering data are not included or reproduced. This community project makes no claim of absolute technical accuracy or Airbus endorsement.
+- [FlightGear aircraft set file](https://wiki.flightgear.org/Aircraft-set.xml) and [aircraft creation guidance](https://wiki.flightgear.org/Howto:Make_an_aircraft)
+- [FlightGear systems properties](https://wiki.flightgear.org/FGproperties/Systems)
+- [JSBSim XML reference material](https://jsbsim.sourceforge.net/JSBSim.xsd.html) and the JSBSim reference manual
+- [JSBSim generic CFM56 engine example](https://github.com/JSBSim-Team/jsbsim/blob/master/engine/CFM56.xml)
+- [FlightGear Canvas snippets](https://wiki.flightgear.org/Canvas_Snippets)
+- [Airbus public A350-900 specifications](https://www.aircraft.airbus.com/en/aircraft/a350/a350-900)

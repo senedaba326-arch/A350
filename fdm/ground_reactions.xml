@@ -1,11 +1,7 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ground_reactions>
   <contact name="Nose gear" type="BOGEY">
-    <location unit="IN">
-      <x>635</x>
-      <y>0</y>
-      <z>-190</z>
-    </location>
+    <location unit="IN"><x>-1109.03</x><y>0</y><z>-157.33</z></location>
     <static_friction>0.80</static_friction>
     <dynamic_friction>0.55</dynamic_friction>
     <rolling_friction>0.025</rolling_friction>
@@ -17,11 +13,7 @@
     <retractable>1</retractable>
   </contact>
   <contact name="Left main gear" type="BOGEY">
-    <location unit="IN">
-      <x>1450</x>
-      <y>-150</y>
-      <z>-190</z>
-    </location>
+    <location unit="IN"><x>-11.42</x><y>-210.04</y><z>-157.87</z></location>
     <static_friction>0.80</static_friction>
     <dynamic_friction>0.55</dynamic_friction>
     <rolling_friction>0.025</rolling_friction>
@@ -33,11 +25,7 @@
     <retractable>1</retractable>
   </contact>
   <contact name="Right main gear" type="BOGEY">
-    <location unit="IN">
-      <x>1450</x>
-      <y>150</y>
-      <z>-190</z>
-    </location>
+    <location unit="IN"><x>-11.42</x><y>210.04</y><z>-157.87</z></location>
     <static_friction>0.80</static_friction>
     <dynamic_friction>0.55</dynamic_friction>
     <rolling_friction>0.025</rolling_friction>
@@ -49,4 +37,3 @@
     <retractable>1</retractable>
   </contact>
 </ground_reactions>
-  
