@@ -15,5 +15,7 @@
 3. Removed two stray `>` characters following cockpit animation object names.
 4. Integrated the community exterior and cockpit wrappers into this package's set file and common configuration.
 5. Retained this repository's separate, approximate JSBSim FDM rather than importing the upstream aircraft FDM or claiming its accuracy. Local Nasal status demonstrations remain separate from upstream aircraft system logic.
+6. Adapted the upstream wing-flex parameter file to this package's three-tank fuel property indices; the generic FlightGear wing-flex implementation itself is provided by FlightGear's data package.
+7. Corrected the right-wing aileron animation to read the right-aileron position property.
 
 The original contributors retain their upstream authorship and license rights. The changes above do not imply Airbus authorship, endorsement, technical review, certification, or validation. See the repository README for the limitations of this simulation package.

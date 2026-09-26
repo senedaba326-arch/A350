@@ -10,8 +10,25 @@
   <location name="CG" unit="IN">
     <x>0</x><y>0</y><z>0</z>
   </location>
-  <pointmass name="Estimated cabin payload">
-    <weight unit="LBS">80000</weight>
-    <location unit="IN"><x>-100</x><y>0</y><z>0</z></location>
+  <!-- Approximate stations; matching payload weights can be adjusted in the aircraft menu. -->
+  <pointmass name="Flight crew">
+    <weight unit="LBS">600</weight>
+    <location unit="IN"><x>-1040</x><y>0</y><z>72</z></location>
+  </pointmass>
+  <pointmass name="Passengers and baggage">
+    <weight unit="LBS">55000</weight>
+    <location unit="IN"><x>-90</x><y>0</y><z>0</z></location>
+  </pointmass>
+  <pointmass name="Forward cargo">
+    <weight unit="LBS">5000</weight>
+    <location unit="IN"><x>-430</x><y>0</y><z>-12</z></location>
+  </pointmass>
+  <pointmass name="Aft cargo">
+    <weight unit="LBS">10000</weight>
+    <location unit="IN"><x>360</x><y>0</y><z>-12</z></location>
+  </pointmass>
+  <pointmass name="Rear bulk cargo">
+    <weight unit="LBS">1000</weight>
+    <location unit="IN"><x>680</x><y>0</y><z>-12</z></location>
   </pointmass>
 </mass_balance>

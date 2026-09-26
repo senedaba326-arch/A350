@@ -10,17 +10,66 @@
       <cockpit type="int">3</cockpit>
       <model type="int">4</model>
     </rating>
-    <aircraft-version type="string">0.2.0</aircraft-version>
+    <aircraft-version type="string">0.3.0</aircraft-version>
     <minimum-fg-version type="string">2020.3</minimum-fg-version>
     <flight-model>jsb</flight-model>
     <aero>A350</aero>
+    <variant>900</variant>
+    <engine>Rolls-Royce Trent XWB-84 (generic performance model)</engine>
     <model path="Aircraft/A350/Models/A350XWB-900.xml"/>
+    <flaps>
+      <setting>0.000</setting>
+      <setting>0.290</setting>
+      <setting>0.596</setting>
+      <setting>0.645</setting>
+      <setting>1.000</setting>
+    </flaps>
+    <limits>
+      <mass-and-balance>
+        <maximum-ramp-mass-lbs>625892</maximum-ramp-mass-lbs>
+        <maximum-takeoff-mass-lbs>623908</maximum-takeoff-mass-lbs>
+        <maximum-landing-mass-lbs>456357</maximum-landing-mass-lbs>
+        <maximum-zero-fuel-mass-lbs>431445</maximum-zero-fuel-mass-lbs>
+      </mass-and-balance>
+    </limits>
     <tags>
       <tag>airliner</tag>
       <tag>twin-engine</tag>
       <tag>widebody</tag>
     </tags>
   </sim>
+  <payload>
+    <weight n="0">
+      <name>Flight crew</name>
+      <weight-lb alias="/fdm/jsbsim/inertia/pointmass-weight-lbs[0]"/>
+      <min-lb type="double">120</min-lb>
+      <max-lb type="double">600</max-lb>
+    </weight>
+    <weight n="1">
+      <name>Passengers and baggage</name>
+      <weight-lb alias="/fdm/jsbsim/inertia/pointmass-weight-lbs[1]"/>
+      <min-lb type="double">0</min-lb>
+      <max-lb type="double">77000</max-lb>
+    </weight>
+    <weight n="2">
+      <name>Forward cargo</name>
+      <weight-lb alias="/fdm/jsbsim/inertia/pointmass-weight-lbs[2]"/>
+      <min-lb type="double">0</min-lb>
+      <max-lb type="double">13000</max-lb>
+    </weight>
+    <weight n="3">
+      <name>Aft cargo</name>
+      <weight-lb alias="/fdm/jsbsim/inertia/pointmass-weight-lbs[3]"/>
+      <min-lb type="double">0</min-lb>
+      <max-lb type="double">18000</max-lb>
+    </weight>
+    <weight n="4">
+      <name>Rear bulk cargo</name>
+      <weight-lb alias="/fdm/jsbsim/inertia/pointmass-weight-lbs[4]"/>
+      <min-lb type="double">0</min-lb>
+      <max-lb type="double">3000</max-lb>
+    </weight>
+  </payload>
   <nasal>
     <load>
       <file>Aircraft/A350/Nasal/electrical.nas</file>

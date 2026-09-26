@@ -16,7 +16,10 @@ class PackageIntegrityTests(unittest.TestCase):
 
     def test_all_xml_files_are_well_formed(self):
         for path in sorted(ROOT.rglob("*.xml")):
-            with self.subTest(path=path.relative_to(ROOT)):
+            relative = path.relative_to(ROOT)
+            if ".git" in relative.parts or ".venv" in relative.parts:
+                continue
+            with self.subTest(path=relative):
                 ET.parse(path)
 
     def test_set_file_points_to_existing_assets(self):
@@ -34,8 +37,12 @@ class PackageIntegrityTests(unittest.TestCase):
         self.assertIsNotNone(common.find("./sim/systems/path"))
         self.assertIsNotNone(common.find("./sim/instrumentation/path"))
         for node in common.findall(".//path"):
-            fg_path = (node.text or "").strip().removeprefix("Aircraft/A350/")
-            self.assertTrue((ROOT / fg_path).is_file(), node.text)
+            value = (node.text or "").strip()
+            if value.startswith("Aircraft/Generic/"):
+                self.assertEqual(value, "Aircraft/Generic/wingflexer.xml")
+                continue
+            fg_path = value.removeprefix("Aircraft/A350/")
+            self.assertTrue((ROOT / fg_path).is_file(), value)
         self.assertTrue((ROOT / "Models/A350XWB-900.ac").is_file())
         self.assertTrue((ROOT / "Models/A350XWB-900-flightdeck.xml").is_file())
         for filename in root.findall("./nasal/load/file"):
@@ -83,6 +90,51 @@ class PackageIntegrityTests(unittest.TestCase):
         self.assertAlmostEqual(float(metrics.findtext("wingspan")) * 0.3048, 64.75, delta=0.02)
         self.assertAlmostEqual(float(metrics.findtext("chord")) * 0.3048, 6.84, delta=0.03)
         self.assertAlmostEqual(float(metrics.findtext("wingarea")) * 0.092903, 442.96, delta=1.0)
+
+    def test_a350_public_mass_and_fuel_limits_match_package(self):
+        aircraft = self.parse("A350-set.xml")
+        limits = aircraft.find("./sim/limits/mass-and-balance")
+        self.assertEqual(int(limits.findtext("maximum-ramp-mass-lbs")), 625892)
+        self.assertEqual(int(limits.findtext("maximum-takeoff-mass-lbs")), 623908)
+        self.assertEqual(int(limits.findtext("maximum-landing-mass-lbs")), 456357)
+        self.assertEqual(int(limits.findtext("maximum-zero-fuel-mass-lbs")), 431445)
+        max_zero_fuel = int(limits.findtext("maximum-zero-fuel-mass-lbs"))
+
+        mass = self.parse("fdm/mass_balance.xml")
+        empty_weight = int(float(mass.findtext("emptywt")))
+        pointmasses = mass.findall("pointmass")
+        payload = aircraft.findall("./payload/weight")
+        self.assertEqual(len(payload), len(pointmasses))
+        maximum_payload = 0
+        for index, (station, load) in enumerate(zip(pointmasses, payload)):
+            self.assertEqual(station.get("name"), load.findtext("name"))
+            self.assertIn(f"pointmass-weight-lbs[{index}]", load.find("weight-lb").get("alias"))
+            self.assertGreater(float(station.findtext("weight")), 0)
+            maximum_payload += int(float(load.findtext("max-lb")))
+        self.assertLessEqual(empty_weight + maximum_payload, max_zero_fuel)
+
+        propulsion = self.parse("fdm/propulsion.xml")
+        capacity_lb = sum(float(tank.findtext("capacity")) for tank in propulsion.findall("tank"))
+        capacity_litres = capacity_lb * 0.45359237 / 0.8
+        self.assertAlmostEqual(capacity_litres, 166488, delta=1664.88)
+
+    def test_wingflex_and_aileron_mapping_are_connected(self):
+        common = self.parse("A350-common.xml")
+        self.assertEqual(common.findtext("./sim/systems/property-rule/path"), "Aircraft/Generic/wingflexer.xml")
+        flex = self.parse("Systems/wingflexer-params.xml").find("params")
+        self.assertEqual(flex.find("fuel-node-1-kg").get("alias"), "/consumables/fuel/tank[0]/level-kg")
+        self.assertEqual(flex.find("fuel-node-2-kg").get("alias"), "/consumables/fuel/tank[2]/level-kg")
+        model = self.parse("Models/A350XWB-900.xml")
+        aileron2 = next(animation for animation in model.findall("animation") if animation.findtext("name") == "Aileron2")
+        self.assertEqual(aileron2.findtext("property"), "surface-positions/right-aileron-pos-norm")
+        flap_detents = [float(node.text) for node in self.parse("A350-set.xml").findall("./sim/flaps/setting")]
+        fcs = self.parse("fdm/flight_control.xml")
+        fdm_detents = [float(node.findtext("position")) for node in fcs.findall("./channel[@name='Flaps']/kinematic/traverse/setting")]
+        self.assertEqual(flap_detents, [0.0, 0.29, 0.596, 0.645, 1.0])
+        self.assertEqual(fdm_detents, flap_detents)
+        aliases = {node.get("alias") for node in common.findall("./sim/multiplay/generic/float")}
+        self.assertIn("/gear/gear[1]/compression-ft", aliases)
+        self.assertIn("/surface-positions/speedbrake-pos-norm", aliases)
 
     def test_fdm_sections_rebuild_the_runtime_file(self):
         with tempfile.TemporaryDirectory() as directory:

@@ -38,7 +38,9 @@ class JSBSimRuntimeTests(unittest.TestCase):
             fdm.set_systems_path("systems")
             self.assertTrue(fdm.load_model("A350"))
             initial_conditions = {
-                "ic/h-sl-ft": 0,
+                # With a ~13 ft gear station and tyre radius, 15.5 ft places
+                # the aircraft near the runway instead of burying its CG in it.
+                "ic/h-sl-ft": 15.5,
                 "ic/vt-kts": 0,
                 "ic/alpha-deg": 0,
                 "ic/beta-deg": 0,
@@ -51,9 +53,21 @@ class JSBSimRuntimeTests(unittest.TestCase):
             for property_path, value in initial_conditions.items():
                 fdm[property_path] = value
             self.assertTrue(fdm.run_ic())
+            default_payload = (600, 55000, 5000, 10000, 1000)
+            for index, expected_lbs in enumerate(default_payload):
+                self.assertAlmostEqual(fdm[f"inertia/pointmass-weight-lbs[{index}]"], expected_lbs)
+            # Confirm that the payload station is adjustable in the live JSBSim model.
+            fdm["inertia/pointmass-weight-lbs[1]"] = 65000
+            fdm["fcs/aileron-cmd-norm"] = 0.5
+            fdm["fcs/flap-cmd-norm"] = 1.0
             for _ in range(120):
                 self.assertTrue(fdm.run())
             self.assertGreater(fdm["simulation/sim-time-sec"], 0.9)
+            self.assertAlmostEqual(fdm["inertia/pointmass-weight-lbs[1]"], 65000)
+            self.assertAlmostEqual(fdm["fcs/left-aileron-pos-norm"], 0.5, places=3)
+            self.assertAlmostEqual(fdm["fcs/right-aileron-pos-norm"], -0.5, places=3)
+            self.assertGreater(fdm["fcs/flap-pos-norm"], 0.0)
+            self.assertLessEqual(fdm["fcs/flap-pos-norm"], 1.0)
 
 
 if __name__ == "__main__":
