@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<output name="A350-flightdata.csv" type="CSV" rate="2">
+  <simulation>true</simulation>
+  <attitude>true</attitude>
+  <position>true</position>
+  <velocities>true</velocities>
+  <forces>true</forces>
+  <moments>true</moments>
+  <engines>true</engines>
+</output>

@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ground_reactions>
+  <contact name="Nose gear" type="BOGEY">
+    <location unit="IN">
+      <x>635</x>
+      <y>0</y>
+      <z>-190</z>
+    </location>
+    <static_friction>0.80</static_friction>
+    <dynamic_friction>0.55</dynamic_friction>
+    <rolling_friction>0.025</rolling_friction>
+    <spring_coeff unit="LBS/FT">180000</spring_coeff>
+    <damping_coeff unit="LBS/FT/SEC">18000</damping_coeff>
+    <damping_coeff_rebound unit="LBS/FT/SEC">24000</damping_coeff_rebound>
+    <max_steer unit="DEG">70</max_steer>
+    <brake_group>NONE</brake_group>
+    <retractable>1</retractable>
+  </contact>
+  <contact name="Left main gear" type="BOGEY">
+    <location unit="IN">
+      <x>1450</x>
+      <y>-150</y>
+      <z>-190</z>
+    </location>
+    <static_friction>0.80</static_friction>
+    <dynamic_friction>0.55</dynamic_friction>
+    <rolling_friction>0.025</rolling_friction>
+    <spring_coeff unit="LBS/FT">680000</spring_coeff>
+    <damping_coeff unit="LBS/FT/SEC">65000</damping_coeff>
+    <damping_coeff_rebound unit="LBS/FT/SEC">90000</damping_coeff_rebound>
+    <max_steer unit="DEG">0</max_steer>
+    <brake_group>LEFT</brake_group>
+    <retractable>1</retractable>
+  </contact>
+  <contact name="Right main gear" type="BOGEY">
+    <location unit="IN">
+      <x>1450</x>
+      <y>150</y>
+      <z>-190</z>
+    </location>
+    <static_friction>0.80</static_friction>
+    <dynamic_friction>0.55</dynamic_friction>
+    <rolling_friction>0.025</rolling_friction>
+    <spring_coeff unit="LBS/FT">680000</spring_coeff>
+    <damping_coeff unit="LBS/FT/SEC">65000</damping_coeff>
+    <damping_coeff_rebound unit="LBS/FT/SEC">90000</damping_coeff_rebound>
+    <max_steer unit="DEG">0</max_steer>
+    <brake_group>RIGHT</brake_group>
+    <retractable>1</retractable>
+  </contact>
+</ground_reactions>
+  

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PropertyList>
+  <sim>
+    <description>Airbus A350-900 — community simulation model</description>
+    <author>Community A350 project</author>
+    <status>alpha</status>
+    <rating>
+      <FDM type="int">2</FDM>
+      <systems type="int">1</systems>
+      <cockpit type="int">1</cockpit>
+      <model type="int">1</model>
+    </rating>
+    <aircraft-version type="string">0.1.0</aircraft-version>
+    <minimum-fg-version type="string">2020.3</minimum-fg-version>
+    <flight-model>jsb</flight-model>
+    <aero>A350</aero>
+    <model path="Aircraft/A350/Models/A350.xml"/>
+    <tags>
+      <tag>airliner</tag>
+      <tag>twin-engine</tag>
+      <tag>widebody</tag>
+    </tags>
+  </sim>
+  <nasal>
+    <load>
+      <file>Aircraft/A350/Nasal/electrical.nas</file>
+      <file>Aircraft/A350/Nasal/hydraulics.nas</file>
+      <file>Aircraft/A350/Nasal/flight-controls.nas</file>
+      <file>Aircraft/A350/Nasal/pneumatics.nas</file>
+      <file>Aircraft/A350/Nasal/systems.nas</file>
+      <file>Aircraft/A350/Nasal/display.nas</file>
+    </load>
+  </nasal>
+  <input>
+    <keyboard>
+      <key n="101">
+        <name>e</name>
+        <binding>
+          <command>nasal</command>
+          <script>A350Display.toggle();</script>
+        </binding>
+      </key>
+    </keyboard>
+  </input>
+</PropertyList>

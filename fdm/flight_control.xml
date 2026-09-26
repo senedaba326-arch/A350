@@ -1,0 +1,162 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<flight_control name="A350 conventional-control approximation">
+  <channel name="Pitch">
+    <summer name="Elevator command and trim">
+      <input>fcs/elevator-cmd-norm</input>
+      <input>fcs/pitch-trim-cmd-norm</input>
+      <clipto>
+        <min>-1</min>
+        <max>1</max>
+      </clipto>
+    </summer>
+    <aerosurface_scale name="Elevator travel">
+      <input>fcs/elevator-command-and-trim</input>
+      <range>
+        <min>-0.35</min>
+        <max>0.35</max>
+      </range>
+      <output>fcs/elevator-pos-rad</output>
+    </aerosurface_scale>
+    <aerosurface_scale name="Elevator normalized">
+      <input>fcs/elevator-pos-rad</input>
+      <domain>
+        <min>-0.35</min>
+        <max>0.35</max>
+      </domain>
+      <range>
+        <min>-1</min>
+        <max>1</max>
+      </range>
+      <output>fcs/elevator-pos-norm</output>
+    </aerosurface_scale>
+  </channel>
+  <channel name="Roll">
+    <aerosurface_scale name="Left aileron">
+      <input>fcs/aileron-cmd-norm</input>
+      <range>
+        <min>-0.30</min>
+        <max>0.30</max>
+      </range>
+      <output>fcs/left-aileron-pos-rad</output>
+    </aerosurface_scale>
+    <aerosurface_scale name="Right aileron">
+      <input>-fcs/aileron-cmd-norm</input>
+      <range>
+        <min>-0.30</min>
+        <max>0.30</max>
+      </range>
+      <output>fcs/right-aileron-pos-rad</output>
+    </aerosurface_scale>
+    <aerosurface_scale name="Left aileron normalized">
+      <input>fcs/left-aileron-pos-rad</input>
+      <domain>
+        <min>-0.30</min>
+        <max>0.30</max>
+      </domain>
+      <range>
+        <min>-1</min>
+        <max>1</max>
+      </range>
+      <output>fcs/left-aileron-pos-norm</output>
+    </aerosurface_scale>
+    <aerosurface_scale name="Right aileron normalized">
+      <input>fcs/right-aileron-pos-rad</input>
+      <domain>
+        <min>-0.30</min>
+        <max>0.30</max>
+      </domain>
+      <range>
+        <min>-1</min>
+        <max>1</max>
+      </range>
+      <output>fcs/right-aileron-pos-norm</output>
+    </aerosurface_scale>
+  </channel>
+  <channel name="Yaw">
+    <aerosurface_scale name="Rudder travel">
+      <input>fcs/rudder-cmd-norm</input>
+      <range>
+        <min>-0.30</min>
+        <max>0.30</max>
+      </range>
+      <output>fcs/rudder-pos-rad</output>
+    </aerosurface_scale>
+    <aerosurface_scale name="Rudder normalized">
+      <input>fcs/rudder-pos-rad</input>
+      <domain>
+        <min>-0.30</min>
+        <max>0.30</max>
+      </domain>
+      <range>
+        <min>-1</min>
+        <max>1</max>
+      </range>
+      <output>fcs/rudder-pos-norm</output>
+    </aerosurface_scale>
+  </channel>
+  <channel name="Flaps">
+    <kinematic name="Flap extension">
+      <input>fcs/flap-cmd-norm</input>
+      <traverse>
+        <setting>
+          <position>0</position>
+          <time>0</time>
+        </setting>
+        <setting>
+          <position>0.2</position>
+          <time>4</time>
+        </setting>
+        <setting>
+          <position>0.4</position>
+          <time>4</time>
+        </setting>
+        <setting>
+          <position>0.6</position>
+          <time>4</time>
+        </setting>
+        <setting>
+          <position>0.8</position>
+          <time>4</time>
+        </setting>
+        <setting>
+          <position>1</position>
+          <time>4</time>
+        </setting>
+      </traverse>
+      <output>fcs/flap-pos-norm</output>
+    </kinematic>
+  </channel>
+  <channel name="Landing gear">
+    <kinematic name="Gear travel">
+      <input>gear/gear-cmd-norm</input>
+      <traverse>
+        <setting>
+          <position>0</position>
+          <time>0</time>
+        </setting>
+        <setting>
+          <position>1</position>
+          <time>8</time>
+        </setting>
+      </traverse>
+      <output>gear/gear-pos-norm</output>
+    </kinematic>
+  </channel>
+  <channel name="Speedbrake">
+    <kinematic name="Spoiler travel">
+      <input>fcs/speedbrake-cmd-norm</input>
+      <traverse>
+        <setting>
+          <position>0</position>
+          <time>0</time>
+        </setting>
+        <setting>
+          <position>1</position>
+          <time>1</time>
+        </setting>
+      </traverse>
+      <output>fcs/speedbrake-pos-norm</output>
+    </kinematic>
+  </channel>
+</flight_control>
+  

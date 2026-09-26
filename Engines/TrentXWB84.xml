@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Approximate generic turbofan curves; not Rolls-Royce engine data. -->
+<turbine_engine name="A350-class 84 klbf turbofan">
+  <milthrust>84000</milthrust>
+  <bypassratio>9.0</bypassratio>
+  <tsfc>0.54</tsfc>
+  <bleed>0.02</bleed>
+  <idlen1>24</idlen1>
+  <idlen2>60</idlen2>
+  <maxn1>100</maxn1>
+  <maxn2>100</maxn2>
+  <augmented>0</augmented>
+  <injected>0</injected>
+  <function name="IdleThrust">
+    <table>
+      <independentVar lookup="row">velocities/mach</independentVar>
+      <independentVar lookup="column">atmosphere/density-altitude</independentVar>
+      <tableData>
+             -10000      0      10000   20000   30000   40000   50000
+        0.0   0.0400  0.0360  0.0430  0.0550  0.0740  0.0950  0.1200
+        0.2   0.0460  0.0430  0.0420  0.0500  0.0670  0.0880  0.1120
+        0.4   0.0100  0.0120  0.0160  0.0300  0.0500  0.0730  0.1000
+        0.6   0.0000  0.0000  0.0000  0.0090  0.0300  0.0550  0.0820
+        0.8   0.0000  0.0000  0.0000  0.0000  0.0160  0.0390  0.0660
+        1.0   0.0000  0.0000  0.0000  0.0000  0.0000  0.0260  0.0510
+      </tableData>
+    </table>
+  </function>
+  <function name="MilThrust">
+    <table>
+      <independentVar lookup="row">velocities/mach</independentVar>
+      <independentVar lookup="column">atmosphere/density-altitude</independentVar>
+      <tableData>
+             -10000      0      10000   20000   30000   40000   50000
+        0.0   1.2000  1.0000  0.7900  0.6000  0.4300  0.2850  0.1750
+        0.2   1.1500  0.9700  0.7700  0.5900  0.4250  0.2820  0.1730
+        0.4   1.1300  0.9600  0.7650  0.5880  0.4250  0.2830  0.1750
+        0.6   1.1600  0.9900  0.7950  0.6150  0.4480  0.3000  0.1870
+        0.8   1.2300  1.0550  0.8550  0.6650  0.4880  0.3300  0.2070
+        1.0   1.3300  1.1500  0.9400  0.7400  0.5500  0.3750  0.2380
+        1.2   0.0000  0.0000  0.0000  0.0000  0.0000  0.0000  0.0000
+      </tableData>
+    </table>
+  </function>
+</turbine_engine>

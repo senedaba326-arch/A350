@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<fileheader>
+  <author>Community A350 project</author>
+  <description>Educational, provisional JSBSim model of an A350-900 class transport.</description>
+  <note>
+      This is an independently authored, non-certified simulation approximation.
+      Only public airframe dimensions and headline mass/thrust figures inform the
+      model. Aerodynamic derivatives, inertias, systems logic and handling are
+      engineering estimates, not Airbus data and not suitable for real-world use.
+    </note>
+</fileheader>
+  
