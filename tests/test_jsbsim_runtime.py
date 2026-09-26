@@ -58,6 +58,40 @@ class JSBSimRuntimeTests(unittest.TestCase):
                 self.assertAlmostEqual(fdm[f"inertia/pointmass-weight-lbs[{index}]"], expected_lbs)
             # Confirm that the payload station is adjustable in the live JSBSim model.
             fdm["inertia/pointmass-weight-lbs[1]"] = 65000
+
+            # Exercise JSBSim's documented generic start sequence: crank with
+            # cutoff closed, open cutoff above 15% N2, then wait for both engines.
+            fdm["propulsion/cutoff_cmd"] = 1
+            fdm["propulsion/starter_cmd"] = 1
+            for _ in range(2400):
+                self.assertTrue(fdm.run())
+                if all(fdm[f"propulsion/engine[{index}]/n2"] >= 15 for index in range(2)):
+                    break
+            else:
+                self.fail("both engine cores should reach the JSBSim light-off threshold")
+
+            fdm["propulsion/cutoff_cmd"] = 0
+            for _ in range(6000):
+                self.assertTrue(fdm.run())
+                if all(fdm[f"propulsion/engine[{index}]/set-running"] for index in range(2)):
+                    break
+            else:
+                self.fail("both engines should reach self-sustaining idle")
+            for _ in range(120):
+                self.assertTrue(fdm.run())
+            for index in range(2):
+                self.assertEqual(fdm[f"propulsion/engine[{index}]/set-running"], 1)
+                self.assertGreater(fdm[f"propulsion/engine[{index}]/thrust-lbs"], 0)
+                self.assertGreater(fdm[f"propulsion/engine[{index}]/fuel-flow-rate-pps"], 0)
+
+            fdm["propulsion/starter_cmd"] = 0
+            fdm["propulsion/cutoff_cmd"] = 1
+            for _ in range(120):
+                self.assertTrue(fdm.run())
+            for index in range(2):
+                self.assertEqual(fdm[f"propulsion/engine[{index}]/set-running"], 0)
+                self.assertAlmostEqual(fdm[f"propulsion/engine[{index}]/fuel-flow-rate-pps"], 0, places=3)
+
             fdm["fcs/aileron-cmd-norm"] = 0.5
             fdm["fcs/flap-cmd-norm"] = 1.0
             for _ in range(120):

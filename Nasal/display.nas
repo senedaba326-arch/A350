@@ -4,6 +4,7 @@ var A350Display = {
   dialog: nil,
   canvas: nil,
   labels: [],
+  engineLabel: nil,
   timer: nil,
 
   textLine: func(root, label, y, size = 20, color = [0.55, 0.95, 0.75]) {
@@ -33,6 +34,7 @@ var A350Display = {
     for (var i = 0; i < 5; i += 1) me.textLine(root, "", 132 + i * 26, 17);
     for (var j = 0; j < 4; j += 1) me.textLine(root, "", 200 + j * 24, 17);
     for (var k = 0; k < 4; k += 1) me.textLine(root, "", 310 + k * 24, 17);
+    me.engineLabel = me.textLine(root, "", 80, 14, [0.7, 0.9, 0.8]);
     me.update();
     me.timer = maketimer(1.0, func { A350Display.update(); });
     me.timer.start();
@@ -43,6 +45,7 @@ var A350Display = {
     if (me.dialog != nil) me.dialog.del();
     me.dialog = nil;
     me.canvas = nil;
+    me.engineLabel = nil;
     me.timer = nil;
     me.labels = [];
   },
@@ -75,5 +78,6 @@ var A350Display = {
     me.labels[16].setText("PRIM 1/2/3  " ~ me.read("/systems/a350/fbw/prim-1/valid") ~ " / " ~ me.read("/systems/a350/fbw/prim-2/valid") ~ " / " ~ me.read("/systems/a350/fbw/prim-3/valid"));
     me.labels[17].setText("SEC 1/2     " ~ me.read("/systems/a350/fbw/sec-1/valid") ~ " / " ~ me.read("/systems/a350/fbw/sec-2/valid") ~ "    BLEED " ~ sprintf("%2.0f", me.read("/systems/a350/pneumatic/bleed-sources")) ~ " sources");
     me.labels[18].setText("PACK 1 " ~ (me.read("/systems/a350/pneumatic/pack-1-available") ? "AVAIL" : "OFF") ~ "    PACK 2 " ~ (me.read("/systems/a350/pneumatic/pack-2-available") ? "AVAIL" : "OFF"));
+    me.engineLabel.setText("ENGINES  " ~ me.read("/systems/a350/engines/start-state", "OFF") ~ "   s START / Shift+s SHUT DOWN");
   }
 };

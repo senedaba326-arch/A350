@@ -9,7 +9,7 @@ An early-stage, educational FlightGear/JSBSim aircraft package. The exterior and
 3. Press **e** to show or hide the community systems-status page.
 4. Press **E** to toggle the demonstrator's simulated external electrical power. It only enables display/system indications; it does not model a real external-power connection.
 5. Use FlightGear's weight-and-balance dialog to load crew, passengers/baggage and forward/aft cargo. The stations are rough estimates; the dialog does not yet enforce fuel-plus-payload mass combinations.
-6. Use FlightGear's normal controls for roll, pitch, yaw, throttle, flaps and landing gear. The flap lever uses A350-style detents. Start the engines using FlightGear's normal engine controls. **B** toggles the parking brake.
+6. Use FlightGear's normal controls for roll, pitch, yaw, throttle, flaps and landing gear. The flap lever uses A350-style detents. Press **s** to start both engines; the generic JSBSim cranking/light-off sequence takes roughly 30 seconds of simulation time. Press **Shift+s** to shut them down. **B** toggles the parking brake.
 7. Use FlightGear's normal view controls to reach the copilot, full-cockpit, overhead-panel and pedestal views.
 
 The aircraft set file selects `Models/A350XWB-900.xml` for the imported exterior/flight deck and `A350.xml` for the local JSBSim FDM. The earlier generated exterior (`Models/A350.xml` and `Models/A350.ac`) remains in the repository as a fallback/reference but is not selected by the set file. Airline liveries and the upstream dynamic livery selector were not imported; the included base texture is used instead.
@@ -29,8 +29,8 @@ Models/A350XWB-900-flightdeck.xml    GPL community 3D cockpit and instrument sub
 Models/                                Imported GPL geometry, textures, lights, effects and submodels
 Sounds/                               Imported GPL sound assets/configuration
 Systems/                              Imported generic FlightGear instrument/system configuration
-Nasal/*.nas                            Local simplified electrical, hydraulic, flight-control,
-                                      pneumatic and status-display demonstrations
+Nasal/*.nas                            Local engine-start sequence plus simplified electrical,
+                                      hydraulic, flight-control, pneumatic and display logic
 Models/A350.xml, Models/A350.ac        Previous generated exterior fallback/reference
 COPYING                                GPL version 2 license text from the upstream model
 THIRD_PARTY_NOTICES.md                 Source revision, credits and adaptation notes
@@ -43,7 +43,7 @@ THIRD_PARTY_NOTICES.md                 Source revision, credits and adaptation n
 - Five approximate weight stations model crew, passengers/baggage and forward/aft/bulk cargo, and their maximum zero-fuel load is kept below the published MZFW for the selected baseline. FlightGear's mass limits are metadata/advisory: a coupled fuel-plus-payload take-off-mass interlock is not implemented, so users must keep the loaded aircraft below the published limits.
 - The imported model's four wing-flex animations are now driven through FlightGear's generic spring/damper wing-flex system, using adapted external-wing fuel aliases. Its stiffness and damping are visual estimates, not structural analysis.
 - The control system does **not** implement Airbus fly-by-wire laws, protections, envelope limiting, redundancy management or reconfiguration. Do not infer real A350 handling or procedures from it.
-- The local electrical, hydraulic and pneumatic logic is illustrative. Nominal voltage/pressure indications and the display-availability bridge are simplified state flags, not component-level aircraft simulations. The flight deck and legacy instrumentation are not validated together in FlightGear.
+- The local electrical, hydraulic and pneumatic logic is illustrative. Nominal voltage/pressure indications and the display-availability bridge are simplified state flags, not component-level aircraft simulations. Engine keys **s** and **Shift+s** run JSBSim's generic two-engine starter/cutoff sequence (including the generic 15% N2 light-off threshold); this is not an authentic Trent XWB start procedure. The flight deck and legacy instrumentation are not validated together in FlightGear.
 - The imported visual model is a community contribution. Its rendering, camera alignment, animations, sounds and interactive cockpit behavior have not been flight-tested in this checkout. FlightGear (`fgfs`) was unavailable in the development environment; the offline checks cannot establish in-simulator correctness.
 - Airbus is not affiliated with or endorsing this project. No proprietary FCOM or restricted Airbus engineering data is included. Nothing here is certified, validated for real-world operation, or suitable for training or safety-critical use.
 
@@ -59,7 +59,7 @@ Run the checks with:
 python3 -m unittest discover -s tests -v
 ```
 
-The checks cover XML and asset references, external-model textures, published-mass/fuel data consistency, load-station wiring, FDM assembly/control response and a JSBSim smoke test. The optional local runtime check runs when the `jsbsim` Python package and data are installed; GitHub Actions pins JSBSim 1.3.1 and runs it on each push. They do not test FlightGear rendering, Nasal execution, wing-flex runtime integration, sound, camera placement or cockpit behavior. `fgfs` is not installed in the current development environment.
+The checks cover XML and asset references, external-model textures, published-mass/fuel data consistency, load-station wiring, FDM assembly/control response and (when enabled) a JSBSim smoke test that cranks, lights and shuts down both engines. The optional local runtime check runs when the `jsbsim` Python package and data are installed; GitHub Actions pins JSBSim 1.3.1 and runs it on each push. They do not test FlightGear rendering, Nasal execution, wing-flex runtime integration, sound, camera placement or cockpit behavior. `fgfs` is not installed in the current development environment.
 
 Rebuild the local FDM after changing `fdm/*.xml`:
 
@@ -75,6 +75,7 @@ The earlier generated low-polygon fallback can be regenerated with `python3 tool
 - [FlightGear systems properties](https://wiki.flightgear.org/FGproperties/Systems)
 - [JSBSim XML reference material](https://jsbsim.sourceforge.net/JSBSim.xsd.html) and the JSBSim reference manual
 - [JSBSim generic CFM56 engine example](https://github.com/JSBSim-Team/jsbsim/blob/master/engine/CFM56.xml)
+- [JSBSim FGTurbine startup model](https://jsbsim-team.github.io/jsbsim/classJSBSim_1_1FGTurbine.html) and [FlightGear JSBSim engine-start notes](https://wiki.flightgear.org/JSBSim_Engines)
 - [FlightGear Canvas snippets](https://wiki.flightgear.org/Canvas_Snippets)
 - [Airbus A350-900 specifications](https://www.aircraft.airbus.com/en/aircraft/a350/a350-900) — dimensions, operating-weight limits, capacity, fuel volume and cruise Mach
 - [EASA Type Certificate Data Sheet EASA.A.151](https://www.easa.europa.eu/en/downloads/17736/en) — A350-941 series, engine variants and certified technical limits

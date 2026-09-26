@@ -182,6 +182,20 @@ class PackageIntegrityTests(unittest.TestCase):
         xs = [vertex[0] for vertex in vertices]
         self.assertAlmostEqual(max(xs) - min(xs), 66.8, delta=0.02)
 
+    def test_engine_start_bindings_reach_the_jsbsim_sequence(self):
+        aircraft = self.parse("A350-set.xml")
+        scripts = {
+            key.findtext("name"): key.findtext("./binding/script")
+            for key in aircraft.findall("./input/keyboard/key")
+        }
+        self.assertEqual(scripts["s"], "A350Engines.start();")
+        self.assertEqual(scripts["S"], "A350Engines.shutdown();")
+        engine_script = (ROOT / "Nasal/engines.nas").read_text(encoding="utf-8")
+        for requirement in ("propulsion/starter_cmd", "propulsion/cutoff_cmd", "n2Left >= 15", '"RUNNING"', '"STOPPING"'):
+            self.assertIn(requirement, engine_script)
+        display = (ROOT / "Nasal/display.nas").read_text(encoding="utf-8")
+        self.assertIn("/systems/a350/engines/start-state", display)
+
     def test_systems_page_and_safety_scope_are_documented(self):
         nasal = "\n".join(path.read_text(encoding="utf-8") for path in (ROOT / "Nasal").glob("*.nas"))
         display = (ROOT / "Nasal/display.nas").read_text(encoding="utf-8")
